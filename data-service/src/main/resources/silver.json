@@ -1,0 +1,53 @@
+{
+  "spot": 14.905,
+  "future": [
+    {
+      "month": 1,
+      "price": 14.86
+    },
+    {
+      "month": 2,
+      "price": 14.886
+    },
+    {
+      "month": 3,
+      "price": 14.926
+    },
+    {
+      "month": 5,
+      "price": 15.009
+    },
+    {
+      "month": 8,
+      "price": 15.129
+    },
+    {
+      "month": 9,
+      "price": 15.169
+    },
+    {
+      "month": 11,
+      "price": 15.251
+    },
+    {
+      "month": 13,
+      "price": 15.33
+    },
+    {
+      "month": 15,
+      "price": 15.409
+    },
+    {
+      "month": 17,
+      "price": 15.484
+    },
+    {
+      "month": 20,
+      "price": 15.585
+    },
+    {
+      "month": 21,
+      "price": 15.626
+    }
+  ]
+}

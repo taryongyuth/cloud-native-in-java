@@ -1,0 +1,33 @@
+{
+  "spot": 868,
+  "future": [
+    {
+      "month": 1,
+      "price": 870.2
+    },
+    {
+      "month": 2,
+      "price": 871.8
+    },
+    {
+      "month": 3,
+      "price": 873.4
+    },
+    {
+      "month": 6,
+      "price": 878.8
+    },
+    {
+      "month": 9,
+      "price": 883.7
+    },
+    {
+      "month": 12,
+      "price": 888.6
+    },
+    {
+      "month": 15,
+      "price": 893.6
+    }
+  ]
+}
