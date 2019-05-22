@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
@@ -13,26 +14,24 @@ import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 import { mainListItems, secondaryListItems } from './listItems';
 import SimpleLineChart from './SimpleLineChart';
-import SimpleTable from './SimpleTable';
 import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
 
 const drawerWidth = 240;
-
-const types = [
-  'Gold',
-  'Silver',
-  'Platinum'
-];
-
 
 const styles = theme => ({
   root: {
     display: 'flex',
+    background: 'white'
   },
   toolbar: {
+    background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
     paddingRight: 24, // keep right padding when drawer closed
   },
   toolbarIcon: {
@@ -103,12 +102,44 @@ const styles = theme => ({
   h5: {
     marginBottom: theme.spacing.unit * 2,
   },
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing.unit * 2,
+  },
 });
 
 class Dashboard extends React.Component {
   state = {
     open: false,
+    data: [],
+    type: 'gold',
   };
+
+  constructor(props) {
+    super(props);
+    this.getZeroCurveByType(this.state.type)
+  }
+
+  handleChange = event => {
+    this.getZeroCurveByType(event.target.value)
+    this.setState({ [event.target.name]: event.target.value });
+    console.log(this.state.type);    
+  };
+
+  getZeroCurveByType(type){
+    var self = this;
+    axios.get('http://localhost:9000/calculate/zero-curve?type=' + type)
+    .then(function (response) {
+      console.log(response.data);
+      self.setState({data: response.data})
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
 
   handleDrawerOpen = () => {
     this.setState({ open: true });
@@ -147,11 +178,11 @@ class Dashboard extends React.Component {
               noWrap
               className={classes.title}
             >
-              Dashboard
+              Data Analytics Dashboard
             </Typography>
             <IconButton color="inherit">
               <Badge badgeContent={0} color="secondary">
-                <NotificationsIcon />
+                <AccountCircle />
               </Badge>
             </IconButton>
           </Toolbar>
@@ -175,25 +206,42 @@ class Dashboard extends React.Component {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
-          <Select
-            value={this.state.age}
-            onChange={this.handleChange}
-            inputProps={{
-              name: 'age',
-              id: 'age-simple',
+          <h2>Select</h2>
+          <FormControl variant="outlined" className={classes.formControl}>
+          <InputLabel
+            ref={ref => {
+              this.InputLabelRef = ref;
             }}
-          ></Select>
-          <Typography variant="h4" gutterBottom component="h2">
+            htmlFor="outlined-age-simple"
+          >
+            Type
+          </InputLabel>
+          <Select
+            value={this.state.type}
+            onChange={this.handleChange}
+            input={
+              <OutlinedInput
+                labelWidth={this.state.labelWidth}
+                name="type"
+                id="outlined-age-simple"
+              />
+            }
+          >
+            <MenuItem value={'gold'}>Gold</MenuItem>
+            <MenuItem value={'silver'}>Silver</MenuItem>
+            <MenuItem value={'platinum'}>Platinum</MenuItem>
+          </Select>
+        </FormControl>
+
+          {/* <Typography variant="h4" gutterBottom component="h2">
             Future Price
           </Typography>
           <div className={classes.tableContainer}>
             <SimpleTable />
-          </div>
-          <Typography variant="h4" gutterBottom component="h2">
-            Zero Curve Screenshot
-          </Typography>
+          </div> */}
+          
           <Typography component="div" className={classes.chartContainer}>
-            <SimpleLineChart />
+            <SimpleLineChart data={this.state.data}/>
           </Typography>
         </main>
       </div>

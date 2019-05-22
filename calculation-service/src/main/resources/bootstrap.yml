@@ -4,6 +4,8 @@ spring:
   cloud:
     config:
       uri: http://localhost:8585
+  allowOrigin:
+    url: http://localhost:3000
 
 eureka:
   client:
