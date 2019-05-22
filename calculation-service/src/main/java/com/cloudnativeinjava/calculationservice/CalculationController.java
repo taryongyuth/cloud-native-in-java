@@ -8,10 +8,13 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping(value = "calculate")
 public class CalculationController {
+
+    protected Logger logger = Logger.getLogger(CalculationController.class.getName());
 
     private RestTemplate restTemplate;
 
@@ -23,16 +26,21 @@ public class CalculationController {
     @CrossOrigin
     @GetMapping("/zero-curve")
     public List getProductsByTypeAndName (@RequestParam(value = "type") final String type) throws IOException {
+        logger.info(String.format("CalculationController.getProductsByTypeAndName(%s)", type));
+
         String url = "http://DATA-SERVICE/data?type=" + type;
         Map result = restTemplate.getForObject(url, Map.class);
         Future future = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(result), Future.class);
+
+        logger.info(String.format("Success retrieve data from json File. Spot Rate: {}", future.getSpot()));
+
         double spot = future.getSpot();
 
         List response = new ArrayList();
         for (Price price: future.getFuture()){
             double rate = getZeroRate(spot, price.getPrice(), price.getMonth());
             Map map = new HashMap();
-            map.put("month", price.month);
+            map.put("month", "month: " + price.month);
             map.put("zero rate", rate);
             response.add(map);
         }

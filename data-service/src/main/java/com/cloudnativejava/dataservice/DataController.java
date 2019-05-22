@@ -1,6 +1,8 @@
 package com.cloudnativejava.dataservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,10 +21,13 @@ import java.util.Map;
 @Validated
 public class DataController {
 
+    private static Logger logger = LoggerFactory.getLogger(DataController.class);
+
     private ObjectMapper mapper = new ObjectMapper();
 
     @GetMapping
     public Map getPrice(@RequestParam(value = "type", required = true, defaultValue = "gold") final String type) throws IOException {
+        logger.info(String.format("DataController.getPriceByType(%s)", type));
         Map response = new HashMap();
         if (type.equals("gold") || type.equals("silver") || type.equals("platinum")){
             response = readJsonFileByType(type);
