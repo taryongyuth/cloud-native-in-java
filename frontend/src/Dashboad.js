@@ -131,7 +131,7 @@ class Dashboard extends React.Component {
 
   getZeroCurveByType(type){
     var self = this;
-    axios.get('http://localhost:9000/calculate/zero-curve?type=' + type)
+    axios.get('http://localhost:9999/api/calculate/zero-curve?type=' + type)
     .then(function (response) {
       console.log(response.data);
       self.setState({data: response.data})

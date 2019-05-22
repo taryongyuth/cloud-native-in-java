@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: open-api-gateway
+
+server:
+  port: 9999
+
+cloud:
+  gateway:
+    discovery:
+      locator:
+        enabled: true
+
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8888/eureka/
+
+zuul:
+  prefix: /api
+  ignored-services: '*'
+  routes:
+    calculation-service:
+      path: /calculate/**
+      stripPrefix: false
